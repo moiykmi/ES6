@@ -538,7 +538,36 @@ var objDonador = {
 	}
 }
 
-console.log(mezclar(objReceptor,objDonador));
+//console.log(mezclar(objReceptor,objDonador));
+console.log(Object.assign(objReceptor,objDonador));
+
+console.log(objDonador);
+
+
+//ORDEN DE LA PROPIEDAD DE LOS OBJETOS
+var objeto = {
+	c:1,
+	0:1,
+	x:1,
+	15:1,
+	r:1,
+	3:1,
+	b:1
+};
+
+objeto.d=1;
+objeto["2"]=1;
+objeto ["a"]=1;
+
+console.log( Object.getOwnPropertyNames(objeto).join(","));
+
+console.log(Object.keys(objeto));
+
+console.log(JSON.stringify(objeto));
+
+for(i in Object.keys(objeto)){
+	console.log(Object.keys(objeto)[i]);
+}
 
 
 
