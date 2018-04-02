@@ -569,8 +569,504 @@ for(i in Object.keys(objeto)){
 	console.log(Object.keys(objeto)[i]);
 }
 
+//Cambiar el prototipo de un OBJETO
+let gato = {
+	sonido(){
+		console.log("Miau!");
+	},
+	chillido(){
+		console.log("MIAU!!!!!");
+	}
+};
+
+let perro ={
+	sonido(){
+		console.log("Guau!!");
+	}
+};
+
+let angora = Object.create(gato);
+console.log(Object.getPrototypeOf(angora) === gato);
+
+angora.sonido();
+angora.chillido();
+
+//Esto transforma el objeto en otro objeto (cambia las cracteristicas).
+Object.setPrototypeOf( angora, perro);
+
+console.log(Object.getPrototypeOf(angora) === gato);
+
+angora.sonido();
 
 
+//Acceso al prototipo con la referencia super
+let persona3 = {
+	saludar(){
+		return "Hola";
+	}
+};
+
+//EMC5
+/**
+let amigo ={
+	saludar(){
+		return Object.getPrototypeOf(this).saludar(this)+", saludos!!!";
+	}
+};
+
+Object.setPrototypeOf(amigo , persona3);
+console.log(amigo.saludar());
+**/
+
+//EMC6
+let amigo ={
+	saludar(){
+		return super.saludar() + ", saludos !!!";
+	}
+};
+
+Object.setPrototypeOf(amigo , persona3);
+console.log(amigo.saludar());
+
+//DESTRUCTURACIÓN DE OBJETOS 
+let ajustes = {
+	nombre1 : "Fernando Herrera",
+	email : "fernando.herrera85@gmail.com",
+	facebook : "fernando.herrera.777",
+	google : "fernando.her.123",
+	premium : true
+};
+
+let { premium:dePago , nombre1 ,google,twitter = "fernando_her85" } = ajustes;
+
+console.log(twitter);
+
+
+//DESTRUCTURACIÓN DE OBBJETOS ANIDADOS
+let autoGuardado = {
+	archivo:"app.js",
+	cursor :{
+		linea :7,
+		columna :16
+	},
+	ultimoArchivo:{
+		archivo : "index.html",
+		cursor : {
+			linea :8,
+			columna :20
+		}
+	},
+	otroNodo:{
+		subNodo : {
+			cursor : {
+				linea :11,
+				columna :11
+			}
+		}
+	}
+
+};
+
+let {cursor:cursorActivo} = autoGuardado;
+console.log(cursorActivo);
+
+let {ultimoArchivo:{ cursor:ultimoArchivo } } = autoGuardado;
+console.log(ultimoArchivo);
+
+
+let { otroNodo : { subNodo:{cursor :otroSuperNodo }}} = autoGuardado;
+console.log(otroSuperNodo);
+
+let otroSuperNodo2 = autoGuardado.otroNodo.subNodo.cursor;
+console.log(otroSuperNodo2);
+
+
+//DESTRUCTURACIÓN DE ARREGLOS
+let frutas = ["banano","pera","uva"];
+
+let [ fruta1, fruta2] = frutas;
+console.log(fruta1);
+console.log(fruta2);
+
+let[,,fruta3]=frutas;
+console.log(fruta3);
+
+let otraFruta="manzana";
+[ otraFruta ] = frutas;
+
+console.log( otraFruta );
+
+//EMC5 --- ejemplo
+let a =1;
+let b =2;
+let temp;
+
+temp = a;
+a = b;
+b = temp;
+
+console.log(a);
+console.log(b);
+
+//EMC6
+[a,b] = [b,a];
+
+console.log(a);
+console.log(b);
+
+//DESTRUCTURACIÓN DE AREEGLOS ANIDADOS
+let colores1 = ["rojo",["verde","amarillo"],"morado","naranja"];
+
+let [ color1 , [ color2 ]] =colores1;
+
+console.log(color1);
+console.log(color2);
+
+let colores2 = ["rojo","verde","amarillo","morado","naranja"];
+
+//La destructuración con el objeto rest solo sirve en los AREEGLOS
+let[ colorPrincipal,colorSecundario, ...demasColores ] = colores2;
+console.log(colorPrincipal);
+console.log(colorSecundario);
+console.log(demasColores);
+
+//VAlORES POR DEFECTOS DE LA DESTRUCTURACIÓN
+let frutas2 = ["banano","pera"];
+
+let [ frut1 , frut2 ="manzana" ] = frutas2;
+
+console.log( frut1 );
+console.log( frut2 );
+
+let opciones = {
+	nombreOp :"Fernando"
+};
+
+let { nombreOp , apellidoOp = "Herrera" } = opciones;
+console.log(nombreOp , apellidoOp);
+
+//DESTRUCTURACIÓN DE PARAMETROS
+
+/** ---EJEMPLO EMC5
+function crearJugador( nickname , opciones ){
+
+	opciones = opciones || {};
+
+	let hp = opciones.hp,
+		sp = opciones.sp,
+		clase = opciones.clase;
+
+	console.log( nickname , hp , sp , clase );
+
+	//CODIGO PARA CREAR EL JUGADOR.....
+
+}
+
+crearJugador("Strider",{
+	hp : 100,
+	sp : 50,
+	clase : "Mago"
+});
+
+**/
+
+function crearJugador( nickname , 
+	{ hp , sp , clase } = { hp : 100 , sp : 50 , clase : "Mago"} 
+){
+
+	console.log( nickname , hp , sp , clase );
+
+	//CODIGO PARA CREAR EL JUGADOR.....
+
+}
+
+crearJugador("Strider",{
+	hp : 200,
+	sp : 40,
+	clase : "Guerrero"
+});
+
+//INTRODUCCIÓN A LOS SÍMBOLOS
+let primerNombre = Symbol('primer nombre');
+let segundoNombre = Symbol();
+
+
+let personaS = {
+	[segundoNombre] : 'Herrera'
+};
+
+personaS [primerNombre] = 'Fernando';
+
+console.log(personaS[primerNombre]);
+console.log(personaS[segundoNombre]);
+console.log(primerNombre);
+console.log(segundoNombre);
+
+let simbolo1 = Symbol('simbolo');
+let simbolo2 = Symbol('simbolo');
+
+console.log(simbolo1 == simbolo2);
+console.log(simbolo1 === simbolo2);
+console.log( Object.is(simbolo1, simbolo2));
+
+console.log(typeof primerNombre);
+
+//esto no se puede
+//console.log("Mi simbolo: " +primerNombre);
+//console.log(`Mi simbolo es: ${primerNombre}`);
+
+console.log( 'primer nombre' in personaS);
+console.log( personaS[primerNombre]);
+
+
+//COMPARTIENDO SIMBOLOS
+let userID = Symbol.for("userID");
+let objeto2 = {};
+
+objeto2[userID] = "12345";
+
+console.log(objeto2[userID]);
+console.log(userID);
+
+
+let userID2 = Symbol.for("userID");
+
+console.log(userID == userID2);
+console.log(userID === userID2);
+console.log(Object.is(userID ,userID2));
+
+console.log(objeto2[userID]);
+console.log(userID2);
+
+let id = Symbol.for("id unico");
+console.log(Symbol.keyFor(id));
+
+let id2 = Symbol.for("id unico");
+console.log(Symbol.keyFor(id2));
+
+console.log(id === id2);
+
+let id3 = Symbol("id unico");
+console.log(Symbol.keyFor(id3));//undefined
+
+
+//COERCIÓN DE SIMBOLOS
+let ids= Symbol.for("ids");
+let numero =10;
+let texto1 = "10";
+let bool = true;
+let NotAN =NaN;
+
+console.log( "Mi simbolo es: " +String(ids));
+
+//RECUPERANDO LAS PROPIEDADES SIMBOLO
+let id5 = Symbol.for("id");
+let activo = Symbol.for("activo");
+
+let persona4 = {
+	[id5] : "123",
+	[activo]:true,
+	["codigo"] : "XY123",
+	nombre : "Fernando",
+	apellido : "Herrera",
+	edad : 31
+};
+
+console.log(Object.keys(persona4));
+
+for( key in persona4){
+	console.log(key , persona4[key]);
+}
+
+let simbolos = Object.getOwnPropertySymbols(persona4);
+console.log(simbolos);
+
+for(i in simbolos){
+	console.log( Symbol.keyFor(simbolos[i]));
+}
+
+//SET  (Lista ordenada de valores sin duplicados 
+//		lo cual permite un acceso rapido a la data)
+
+//CREANDO SET AGREGANDO ITEM Y BUSCANDO
+let items = new Set();
+items.add(10);
+items.add(11);
+items.add(15);
+items.add(17);
+items.add(17);
+items.add(17);
+items.add("17");
+items.add(17);
+//no ingrsa los mismo valores ya que antes de agregar
+//Ocupa el Object.is para saber si el valor ya existe 
+
+console.log(typeof items );
+console.log(items.size);
+console.log(items);
+
+
+let items2 = new Set([1,2,3,4,5,7,7,7,7,7,7,7]);
+
+console.log(items2.size);
+console.log(items2);
+
+//para buscar se puede usar el has
+console.log (items2.has(7));
+
+//REMOVIENDO VALORES DE UN SET
+let items3 = new Set([1,2,3,4,5]);
+
+console.log(items3.size);
+console.log(items3);
+
+items3.delete(3);//Borrar uno
+
+console.log(items3.size);
+console.log(items3);
+
+items3.clear();//Borrar todo
+
+console.log(items3.size);
+console.log(items3);
+
+//FOREACH EN LOS SET
+let personasSet = new Set(["Fernando","Maria","Susana"]);
+
+personasSet.forEach( function (valor, llave, setOriginal){
+	console.log(valor, llave , setOriginal);
+
+	console.log(personasSet === setOriginal);
+});
+
+
+//CONVERTIR UN SET EN ARRAY
+let numerosA = [1,2,3,4,5,9,7,7,8,3,2,1];
+
+let arrayNumeros = eliminaDuplicados(numerosA);
+
+console.log(arrayNumeros);
+
+//esto sirve para sacar los duplicados
+function eliminaDuplicados (items){
+
+	return [...new Set(items)];
+}
+
+//WEEKSET
+let set = new WeakSet();
+
+let person1={
+	nombre : "Juan Carlos"
+};
+
+let person2={
+	nombre2 : "Maria Perez"
+};
+
+set.add(person1);
+set.add(person2);
+
+set.delete(person1);
+
+console.log(set);
+
+//LOS MAPAS EN JAVASCRIPT
+let mapa = new Map();
+
+mapa.set("nombre", "Fernando" );
+mapa.set("edad", 31 );
+mapa.set("apellido");
+
+console.log(mapa.size);
+console.log(mapa);
+
+console.log(mapa.get("nombre"));
+console.log(mapa.get("edad"));
+console.log(mapa.has("nombre"));
+console.log(mapa.has("apellido"));
+
+
+mapa.delete("nombre");
+console.log(mapa.has("nombre"));
+console.log(mapa.get("nombre"));
+
+
+mapa.set("edad");
+console.log(mapa);
+
+
+mapa.clear();
+console.log(mapa);
+
+//INICIALIZACION DE LOS MAPAS
+let mapa1 = new Map([ ["nombre" ,"Fernando"],[null , 1235]]);
+
+console.log(mapa1);
+
+console.log(mapa1.get(null));
+
+//FOREACH EN LOS MAPAS
+let mapa2 = new Map([ ["nombre" ,"Fernando"],["edad" , 31]]);
+
+mapa2.forEach(function(valor , llave , mapaOrigen){
+
+	console.log(`llave: ${llave}, valor: ${valor}`);
+
+	console.log(mapaOrigen);
+})
+
+
+mapa2.forEach((valor,llave)=> console.log(`${valor}`));
+
+//NUEVO CICLO FOR-OF
+let varionumeros = [100,20,30,50,200];
+
+for(let i = 0;i< varionumeros.length;i++){
+	console.log(varionumeros[i]);
+}
+
+for(let i in varionumeros){
+	console.log( varionumeros[i]);
+}
+
+//nueva manera de hacerlo
+
+for (let i of varionumeros){
+	console.log(i);
+}
+
+let arregloPersonas = [
+	{nombre : "fernando", edad:30},
+	{nombre : "maria", edad:10},
+	{nombre : "Susana", edad:18},
+	{nombre : "victor", edad:25},
+	{nombre : "juan", edad:40}
+]; 
+
+
+for (let i of arregloPersonas){
+	console.log(i.nombre,i.edad);
+}
+
+let arregloPersonas2 = new Set();
+
+arregloPersonas2.add({nombre:"fernando", edad : 31});
+arregloPersonas2.add({nombre:"ana", edad : 32});
+arregloPersonas2.add({nombre:"luis", edad : 12});
+
+for (let i of arregloPersonas2){
+	console.log(i.nombre,i.edad);
+}
+
+
+let arregloPersonas3 = new Map ([["nombre","Fernando"],["apellido","Lorca"]]);
+
+for (let i of arregloPersonas3){
+	console.log(i);
+}
+
+//
 
 
 
