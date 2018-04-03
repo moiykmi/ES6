@@ -1066,12 +1066,248 @@ for (let i of arregloPersonas3){
 	console.log(i);
 }
 
-//
+//JAVASCRIPT CLASES
+//INTRODUCCION 
+
+//EMC5 -----Como hacer una clase
+function Persona ( nombre){
+
+	this.nombre = nombre;
+
+	this.gritarNombre = function (){
+		console.log( this.nombre.toUpperCase());
+	}
+} 
+
+Persona.prototype.decirNombre = function () {
+	console.log(this.nombre);
+}
+
+let fernando = new Persona ("moises");
+
+fernando.gritarNombre();
+fernando.decirNombre();
+
+console.log( fernando instanceof Persona);
+console.log( fernando instanceof Object);
+
+//EMC6 -----Definicion de una clase
+
+class Persona2 {
+
+	constructor(nombre){
+		this.nombre = nombre;
+	}
+
+	decirNombre(){
+		console.log(this.nombre);
+	}
+}
+
+let fernand = new Persona2("Fernando");
+
+fernand.decirNombre();
+
+console.log(fernand instanceof Persona2);
+console.log(fernand instanceof Object);
+
+console.log(typeof Persona2);
+console.log(typeof Persona2.prototype.decirNombre);
+
+//CLASES COMO EXPRESIONES
+let miFuncion3 = function(){
+	console.log("Hola Mundo");
+}
+
+let otraFuncion = miFuncion3;
+
+console.log(typeof otraFuncion);
+
+otraFuncion();
+
+let Persona3 = class{
+	constructor(){
+		this.nombre="Moises";
+		this.edad = 30;
+		this.direccion = "adasdsdadasd";
+	}
+
+	decirNombre(){
+		console.log("Hola "+this.nombre);
+	}
+}
+
+let feña = new Persona3();
 
 
+feña.decirNombre();
+console.log(typeof feña);
+console.log(feña instanceof Persona3);
+
+//CLASES COMO PARAMETROS
+function creadorClases(definicionClase){
+	return new definicionClase();
+}
+
+let objeto3 = creadorClases(class{
+	constructor(){
+		this.nombre = undefined;
+		this.edad =30;
+	}
+
+	saludar(){
+		console.log("Hola!!!");
+	}
+});
+
+objeto3.saludar();
+
+//------------OTRO EJEMPLO 
+class Cuadrado{
+	constructor(lado){
+		this.lado= lado;
+	}
+
+	getArea(){
+		return this.lado*this.lado;
+	}
+}
+
+function imprimirCuadrado (cuadrado){
+
+	if(!(cuadrado instanceof Cuadrado)){
+		console.error("EL parameetro enviado no es cuadrado");
+	}
+
+	console.log(cuadrado.getArea());
+}
+
+let mesa = new Cuadrado(10);
+//let mesa = "123";----esta linea hace saltar el error
+
+imprimirCuadrado(mesa);
+
+//MIEMBROS ESTATICOS Y METODOS COMPUTADOS
+
+//------------COMUTADA
+
+let nombreMetodo = "gritarNombre";
+
+//------------STATICOS
+class Persona4{
+	constructor(nombre){
+		this.nombre = nombre;
+	}
+
+	decirNombre(){
+		console.log( this.nombre);
+	}
+
+	[ nombreMetodo ] () {
+		console.log( this.nombre.toUpperCase());
+	}
+
+	static crear(nombre){
+		return new Persona4(nombre);
+	}
+}
+
+let yo = Persona4.crear("Moises");
+
+console.log(yo);
 
 
+//HERENCIA DE CLASE
+class Rectangulo{
+	constructor(alto , largo){
+		this.alto = alto;
+		this.largo = largo;
+	}
+
+	getArea(){
+		return this.alto*this.largo;
+	}
+}
+
+let rectangulo = new Rectangulo(3,2);
+
+console.log(rectangulo.getArea());
+
+class Cuadrado2 extends Rectangulo{
+	constructor(alto){
+		super(alto,alto);
+	}
+}
+
+let nuevoCuadrado = new Cuadrado2 (3);
+console.log(nuevoCuadrado.getArea());
 
 
+console.log(nuevoCuadrado instanceof Cuadrado2);
+console.log(nuevoCuadrado instanceof Rectangulo);
 
+//SOBRESCRIBIENDO FUNCIONES DEL PADRE
+class Cuadrado3 extends Rectangulo{
+	constructor(alto){
+		super(alto,alto);
+	}
+
+	getArea(){
+		//return "Cuadrado: "+(this.alto*this.alto);
+		return super.getArea();
+	}
+}
+
+let nuevoCuadrado2 = new Cuadrado3 (3);
+console.log(nuevoCuadrado2.getArea());
+
+
+console.log(nuevoCuadrado2 instanceof Cuadrado3);
+console.log(nuevoCuadrado2 instanceof Rectangulo);
+
+
+//Problematicas EM6
+
+//PROCESO ASICRONO
+function tareaAsicrona(){
+	setTimeout(function(){
+		console.log("Proceso Asincrono terminado");
+		resolve();
+	},3000)
+}
+
+tareaAsicrona();
+
+console.log("codigo secuencial");
+
+function resolve(){
+	console.log("TODO OK!!!");
+}
+
+function reject(){
+	console.log("TODO MALO!!!!");
+}
+
+
+//PROMESAS EMC6
+function tareaAsicrona2(){
+
+	let promesa = new Promise( (resolve, reject) =>{
+		setTimeout(function(){
+			console.log("Proceso Asincrono terminado");
+			reject();
+		},3000)
+
+	})
+
+	return promesa;
+}
+
+tareaAsicrona2().then( function(){
+	console.log("TODO OK!!!");	
+},function(){
+	console.error("TODO MALO!!!!");
+});
+
+console.log("codigo secuencial");
 
